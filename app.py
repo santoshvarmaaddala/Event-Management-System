@@ -99,18 +99,16 @@ def ca():
     return render_template("register.html", role="ADMIN")
 
 
-if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()  # Create tables
-
-        # Check if the default admin user exists
-        admin_user = User.query.filter_by(username="admin").first()
-        if not admin_user:
-            # Add default admin user
-            default_admin = User(username="admin", password="1234", role="ADMIN")
-            db.session.add(default_admin)
-            db.session.commit()
-            print("Default admin user created: username='admin', password='1234'")
-
-    print("Database setup complete!")
-    app.run(debug=True)
+with app.app_context():
+    db.create_all()  # Create tables
+    # Check if the default admin user exists
+    admin_user = User.query.filter_by(username="admin").first()
+    if not admin_user:
+        # Add default admin user
+        default_admin = User(username="admin", password="1234", role="ADMIN")
+        db.session.add(default_admin)
+        db.session.commit()
+        print(db.session.query(User).all())
+        print("Default admin user created: username='admin', password='1234'")
+print("Database setup complete!")
+app.run(debug=True)
