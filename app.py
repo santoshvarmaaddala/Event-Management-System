@@ -1,15 +1,16 @@
 from flask import Flask
+from flask import render_template
 
 app = Flask(__name__)
 
 @app.route("/")
 def root():
-    return "<marquee><h1>Hello, World</h1></marquee>"
+    return render_template('login.html')
 
 @app.route("/userhome")
 def userhome():
-    return "<marquee><h1>USER HOME</h1></marquee>"
+    return render_template('userhome.html')
 
 @app.route("/adminpanel")
 def adminpanel():
-    return "<marquee><h1>Admin Panel</h1></marquee>"
+    return render_template('admin.html')
