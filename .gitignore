@@ -2,3 +2,4 @@ venv
 pyvenv.cfg
 __pycache__
 my-memory.txt
+event_flask_project
