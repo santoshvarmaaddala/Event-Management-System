@@ -57,7 +57,7 @@ def adminpanel():
 
 @app.route('/register', methods=['GET'])
 def register():
-    return render_template("register.html")
+    return render_template("register.html", role="USER")
 
 
 @app.route('/register', methods=['POST'])
@@ -70,7 +70,7 @@ def adduser():
             print(user)
             return Exception("Username already exists try changing username")
     else:
-        all_users.append(User(username, password))
+        all_users.append(User(username, password,role=role))
         print(all_users[-1])
 
         return render_template("login.html", message="Please Login New User")
