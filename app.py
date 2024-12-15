@@ -16,8 +16,11 @@ with app.app_context():
 def valid_login(username, password):
     return User.query.filter_by(username=username, password=password).first()
 
+@app.route('/')
+def home():
+    return render_template("index.html")
 
-@app.route('/', methods=['POST', 'GET'])
+@app.route('/login', methods=['POST', 'GET'])
 def login():
     error = None
     if request.method == 'POST':
