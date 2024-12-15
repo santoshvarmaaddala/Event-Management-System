@@ -7,6 +7,7 @@ class Event:
         self.status = status
 
 
+
 class User:
     def __init__(self, username, password, role="USER"):
         self.username = username
@@ -17,6 +18,6 @@ class User:
         return self.username
 
 class BookEvent:
-    def __init__(self):
-        self.user = None
-        self.event = None
+    def __init__(self,username,event):
+        self.username = username
+        self.event = event

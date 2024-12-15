@@ -1,5 +1,8 @@
+{{session['user']}}
+<br>
+{{session['role']}}
 {% for event in events %}
-    <form action="/book-event">
+    <form action="/book-event" method="post">
         <div style="border:1px solid">
         <h1>{{event.event_name}}</h1>
         <p>{{event.capacity}}</p>
@@ -16,3 +19,5 @@
     </div>
     </form>
 {% endfor %}
+
+<a href="/getall">click here to check all your events</a>

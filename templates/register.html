@@ -12,7 +12,12 @@
       <label for="password">Enter Your Password</label>
       <input id="password" type="password" name="password">
         <br>
-      <input type="submit">
+        {% if role == "ADMIN" %}
+            <input type="hidden" name="role" value="ADMIN">
+        {% else %}
+            <input type="hidden" name="role" value="USER">
+        {% endif %}
+        <input type="submit">
     </form>
 </body>
 </html>

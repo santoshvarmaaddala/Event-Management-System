@@ -1,4 +1,6 @@
-
+{{session['user']}}
+<br>
+{{session['role']}}
 {% for event in events %}
     <div style="border:1px solid">
         <h1>{{event.event_name}}</h1>
@@ -16,3 +18,4 @@
 {% endfor %}
 
 <a href="/addevent">Add a event</a>
+<a href="/createadmin">Create a admin</a>

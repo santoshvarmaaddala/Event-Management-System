@@ -1,11 +1,16 @@
-from flask import Flask
-from flask import render_template, request
-from models import Event, User
+from flask import Flask, url_for, redirect
+from flask import render_template, request , session
+from models import Event, User, BookEvent
 
 app = Flask(__name__)
+app.secret_key = "jhkgfjhkfgdjhkfgdjhfgdjhfgd"
 all_users = []  # My temp DataBase
-all_events = []  # Events table
+all_users.append(
+    User(username="admin",password="1234",role="ADMIN")
+)
 
+all_events = []  # Events table
+all_bookings = []
 
 # Sample function to validate login credentials
 def valid_login(username, password):
@@ -26,6 +31,8 @@ def login():
     if request.method == 'POST':
         user = valid_login(request.form['username'], request.form['password'])
         if user:
+            session['user'] = user.username
+            session['role'] = user.role
             if user.role == "ADMIN":
                 return render_template("admin.html", user=user, events=all_events)
             return render_template("userhome.html", user=user, events=all_events)
@@ -57,8 +64,9 @@ def register():
 def adduser():
     username = request.form["username"]
     password = request.form["password"]
+    role = request.form['role']
     for user in all_users:
-        if user["username"] == username:
+        if user.username == username:
             print(user)
             return Exception("Username already exists try changing username")
     else:
@@ -82,6 +90,30 @@ def add_events():
 
         return render_template("admin.html", events=all_events)
 
-@app.route("/book-event")
+@app.route("/book-event",methods=['POST'])
 def b():
-    return "Your Event Id"  + request.form['event_name']
+    username = session["user"]
+    event = None
+    for i in all_events:
+        if i.event_name == request.form['event_name']:
+            event = i
+            break
+
+    all_bookings.append(
+        BookEvent(username , event)
+    )
+    return render_template("userhome.html",message="booking succesffull")
+
+@app.route("/getall")
+def getall():
+    if session["role"] == "ADMIN":
+        return render_template("bookings",books=all_bookings)
+    temp = []
+    for i in all_bookings:
+        if i.username == session["username"]:
+            temp.append(i)
+
+    return render_template("bookings.html",books=temp)
+@app.route("/createadmin")
+def ca():
+    return render_template("register.html", role="ADMIN")
