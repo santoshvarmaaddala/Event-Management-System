@@ -1,25 +1,30 @@
-class Event:
-    def __init__(self, event_name, capacity, location, pph, status=True):
-        self.event_name = event_name
-        self.capacity = capacity
-        self.location = location
-        self.price_per_hour = pph
-        self.status = status
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
+
+class Event(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    event_name = db.Column(db.String(100), nullable=False)
+    capacity = db.Column(db.Integer, nullable=False)
+    location = db.Column(db.String(100), nullable=False)
+    price_per_hour = db.Column(db.Float, nullable=False)
+    status = db.Column(db.Boolean, default=True)
 
     def __str__(self):
         return self.event_name
 
 
-class User:
-    def __init__(self, username, password, role="USER"):
-        self.username = username
-        self.password = password
-        self.role = role
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(50), unique=True, nullable=False)
+    password = db.Column(db.String(100), nullable=False)
+    role = db.Column(db.String(20), default='USER')
 
     def __str__(self):
         return self.username
 
-class BookEvent:
-    def __init__(self,username,event):
-        self.username = username
-        self.event = event
+
+class BookEvent(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(50), db.ForeignKey('user.username'), nullable=False)
+    event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)

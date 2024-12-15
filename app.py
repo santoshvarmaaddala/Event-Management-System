@@ -1,28 +1,20 @@
-from flask import Flask, url_for, redirect
-from flask import render_template, request , session
-from models import Event, User, BookEvent
+from flask import Flask, render_template, request, session
+from models import db, Event, User, BookEvent
 
 app = Flask(__name__)
 app.secret_key = "jhkgfjhkfgdjhkfgdjhfgdjhfgd"
-all_users = []  # My temp DataBase
-all_users.append(
-    User(username="admin",password="1234",role="ADMIN")
-)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-all_events = []  # Events table
-all_bookings = []
+db.init_app(app)
 
-# Sample function to validate login credentials
+# Create tables
+with app.app_context():
+    db.create_all()
+
+
 def valid_login(username, password):
-    # Hardcoded credentials for demonstration
-    for user in all_users:
-        if user.username == username and user.password == password:
-            return user
-    return None
-
-
-def log_the_user_in(username):
-    return f"Welcome, {username}!"
+    return User.query.filter_by(username=username, password=password).first()
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -34,25 +26,13 @@ def login():
             session['user'] = user.username
             session['role'] = user.role
             if user.role == "ADMIN":
-                return render_template("admin.html", user=user, events=all_events)
-            return render_template("userhome.html", user=user, events=all_events)
+                events = Event.query.all()
+                return render_template("admin.html", user=user, events=events)
+            events = Event.query.all()
+            return render_template("userhome.html", user=user, events=events)
         else:
             error = 'Invalid username/password'
-    # Render the login form with error (if any)
     return render_template('login.html', error=error)
-
-
-@app.route("/userhome")
-def userhome():
-    return render_template('userhome.html')
-
-
-@app.route("/adminpanel")
-def adminpanel():
-    return render_template('admin.html', events=all_events)
-
-
-# Manoj's Code
 
 
 @app.route('/register', methods=['GET'])
@@ -65,56 +45,72 @@ def adduser():
     username = request.form["username"]
     password = request.form["password"]
     role = request.form['role']
-    for user in all_users:
-        if user.username == username:
-            print(user)
-            return Exception("Username already exists try changing username")
-    else:
-        all_users.append(User(username, password,role=role))
-        print(all_users[-1])
+    existing_user = User.query.filter_by(username=username).first()
+    if existing_user:
+        return "Username already exists, try changing the username"
+    new_user = User(username=username, password=password, role=role)
+    db.session.add(new_user)
+    db.session.commit()
+    return render_template("login.html", message="Please Login New User")
 
-        return render_template("login.html", message="Please Login New User")
 
 @app.route("/addevent", methods=['POST', 'GET'])
 def add_events():
     if request.method == "GET":
         return render_template("eventsform.html")
     else:
-        n_event = Event(request.form['eventname'],
-                        request.form['capacity'],
-                        request.form["location"],
-                        request.form['pph'],
-                        request.form['status'] == "True")
+        n_event = Event(
+            event_name=request.form['eventname'],
+            capacity=request.form['capacity'],
+            location=request.form["location"],
+            price_per_hour=request.form['pph'],
+            status=request.form['status'] == "True"
+        )
+        db.session.add(n_event)
+        db.session.commit()
+        events = Event.query.all()
+        return render_template("admin.html", events=events)
 
-        all_events.append(n_event)
 
-        return render_template("admin.html", events=all_events)
-
-@app.route("/book-event",methods=['POST'])
+@app.route("/book-event", methods=['POST'])
 def b():
     username = session["user"]
-    event = None
-    for i in all_events:
-        if i.event_name == request.form['event_name']:
-            event = i
-            break
+    event_name = request.form['event_name']
+    event = Event.query.filter_by(event_name=event_name).first()
+    if event:
+        new_booking = BookEvent(username=username, event_id=event.id)
+        db.session.add(new_booking)
+        db.session.commit()
+    events = Event.query.all()
+    return render_template("userhome.html", message="Booking successful", events=events)
 
-    all_bookings.append(
-        BookEvent(username , event)
-    )
-    # return redirect("userhome")
-    return render_template("userhome.html",message="booking succesffull",events=all_events)
 
 @app.route("/getall")
 def getall():
     if session["role"] == "ADMIN":
-        return render_template("bookings",books=all_bookings)
-    temp = []
-    for i in all_bookings:
-        if i.username == session["user"]:
-            temp.append(i)
+        bookings = BookEvent.query.all()
+        return render_template("bookings.html", books=bookings)
+    user_bookings = BookEvent.query.filter_by(username=session["user"]).all()
+    return render_template("bookings.html", books=user_bookings)
 
-    return render_template("bookings.html",books=temp)
+
 @app.route("/createadmin")
 def ca():
     return render_template("register.html", role="ADMIN")
+
+
+if __name__ == "__main__":
+    with app.app_context():
+        db.create_all()  # Create tables
+
+        # Check if the default admin user exists
+        admin_user = User.query.filter_by(username="admin").first()
+        if not admin_user:
+            # Add default admin user
+            default_admin = User(username="admin", password="1234", role="ADMIN")
+            db.session.add(default_admin)
+            db.session.commit()
+            print("Default admin user created: username='admin', password='1234'")
+
+    print("Database setup complete!")
+    app.run(debug=True)
