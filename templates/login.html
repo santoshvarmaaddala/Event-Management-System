@@ -60,6 +60,9 @@
 <body>
     <div class="login-container">
         <h2>Login</h2>
+        {% if message %}
+            <b>{{message}}</b>
+        {% endif %}
         {% if error %}
             <div class="error">{{ error }}</div>
         {% endif %}
@@ -72,6 +75,7 @@
             
             <button type="submit">Login</button>
         </form>
+        <a href="/register">Register Here</a>
     </div>
 </body>
 </html>

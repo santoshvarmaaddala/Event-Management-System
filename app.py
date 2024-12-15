@@ -1,15 +1,19 @@
 from flask import Flask
 from flask import render_template, request
+from models import Event
 
 app = Flask(__name__)
+all_users = []  # My temp DataBase
+all_events = []  # Events table
 
 
 # Sample function to validate login credentials
 def valid_login(username, password):
     # Hardcoded credentials for demonstration
-    if username == "admin" and password == "12345":
-        return True
-    return False
+    for user in all_users:
+        if user['username'] == username and user['password'] == password:
+            return user
+    return None
 
 
 def log_the_user_in(username):
@@ -20,8 +24,9 @@ def log_the_user_in(username):
 def login():
     error = None
     if request.method == 'POST':
-        if valid_login(request.form['username'], request.form['password']):
-            return log_the_user_in(request.form['username'])
+        user = valid_login(request.form['username'], request.form['password'])
+        if user:
+            return render_template("admin.html", user=user)
         else:
             error = 'Invalid username/password'
     # Render the login form with error (if any)
@@ -35,12 +40,10 @@ def userhome():
 
 @app.route("/adminpanel")
 def adminpanel():
-    return render_template('admin.html')
+    return render_template('admin.html', events=all_events)
 
 
 # Manoj's Code
-
-all_users = []  # My temp DataBase
 
 
 @app.route('/register', methods=['GET'])
@@ -65,6 +68,20 @@ def adduser():
         )
         print(all_users[-1])
 
-        return render_template("userhome.html",contextvars={
-            "username": username
-        })
+        return render_template("login.html", message="Please Login New User")
+
+
+@app.route("/addevent", methods=['POST', 'GET'])
+def add_events():
+    if request.method == "GET":
+        return render_template("eventsform.html")
+    else:
+        n_event = Event(request.form['eventname'],
+                        request.form['capacity'],
+                        request.form["location"],
+                        request.form['pph'],
+                        request.form['status'] == "True")
+
+        all_events.append(n_event)
+
+        return render_template("admin.html", events=all_events)

@@ -1,1 +1,18 @@
-<h1>adminpanel</h1>
+
+{% for event in events %}
+    <div style="border:1px solid">
+        <h1>{{event.event_name}}</h1>
+        <p>{{event.capacity}}</p>
+        <p>{{event.location}}</p>
+        <p>{{event.price_per_location}}</p>
+        <p>
+            {% if event.status and user.role == 'USER' %}
+                <a href="/book/{{event_name}}">Book Now</a>
+            {% else %}
+                booked
+            {% endif %}
+        </p>
+    </div>
+{% endfor %}
+
+<a href="/addevent">Add a event</a>

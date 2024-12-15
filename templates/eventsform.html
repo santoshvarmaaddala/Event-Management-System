@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create a Event</title>
+</head>
+<body>
+    <form action="/addevent" method="POST">
+        <label for="event_name">Event Name:</label><br>
+        <input type="text" id="event_name" name="eventname" required><br><br>
+
+        <label for="capacity">Capacity:</label><br>
+        <input type="number" id="capacity" name="capacity" required><br><br>
+
+        <label for="location">Location:</label><br>
+        <input type="text" id="location" name="location" required><br><br>
+
+        <label for="price_per_hour">Price per Hour:</label><br>
+        <input type="number" id="price_per_hour" name="pph" step="0.01" required><br><br>
+
+        <label for="status">Status:</label><br>
+        <select id="status" name="status">
+            <option value="True">Active</option>
+            <option value="False">Inactive</option>
+        </select><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
