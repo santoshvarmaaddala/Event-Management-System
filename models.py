@@ -6,6 +6,8 @@ class Event:
         self.price_per_hour = pph
         self.status = status
 
+    def __str__(self):
+        return self.event_name
 
 
 class User:

@@ -102,7 +102,8 @@ def b():
     all_bookings.append(
         BookEvent(username , event)
     )
-    return render_template("userhome.html",message="booking succesffull")
+    # return redirect("userhome")
+    return render_template("userhome.html",message="booking succesffull",events=all_events)
 
 @app.route("/getall")
 def getall():
@@ -110,7 +111,7 @@ def getall():
         return render_template("bookings",books=all_bookings)
     temp = []
     for i in all_bookings:
-        if i.username == session["username"]:
+        if i.username == session["user"]:
             temp.append(i)
 
     return render_template("bookings.html",books=temp)
