@@ -1,1 +1,18 @@
-<h1>Welcome {{contextvars['username']}}</h1>
+{% for event in events %}
+    <form action="/book-event">
+        <div style="border:1px solid">
+        <h1>{{event.event_name}}</h1>
+        <p>{{event.capacity}}</p>
+        <p>{{event.location}}</p>
+        <p>{{event.price_per_location}}</p>
+        <p style="{% if event.status %} color:green {% else %} color:red {% endif %}">
+            {% if event.status %}
+                <input type="hidden" name="event_name" value="{{event.event_name}}">
+                <input type="submit" value="booknow">
+            {% else %}
+                booked
+            {% endif %}
+        </p>
+    </div>
+    </form>
+{% endfor %}

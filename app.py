@@ -1,6 +1,6 @@
 from flask import Flask
 from flask import render_template, request
-from models import Event
+from models import Event, User
 
 app = Flask(__name__)
 all_users = []  # My temp DataBase
@@ -11,7 +11,7 @@ all_events = []  # Events table
 def valid_login(username, password):
     # Hardcoded credentials for demonstration
     for user in all_users:
-        if user['username'] == username and user['password'] == password:
+        if user.username == username and user.password == password:
             return user
     return None
 
@@ -26,7 +26,9 @@ def login():
     if request.method == 'POST':
         user = valid_login(request.form['username'], request.form['password'])
         if user:
-            return render_template("admin.html", user=user)
+            if user.role == "ADMIN":
+                return render_template("admin.html", user=user, events=all_events)
+            return render_template("userhome.html", user=user, events=all_events)
         else:
             error = 'Invalid username/password'
     # Render the login form with error (if any)
@@ -60,16 +62,10 @@ def adduser():
             print(user)
             return Exception("Username already exists try changing username")
     else:
-        all_users.append(
-            {
-                "username": username,
-                "password": password
-            }
-        )
+        all_users.append(User(username, password))
         print(all_users[-1])
 
         return render_template("login.html", message="Please Login New User")
-
 
 @app.route("/addevent", methods=['POST', 'GET'])
 def add_events():
@@ -85,3 +81,7 @@ def add_events():
         all_events.append(n_event)
 
         return render_template("admin.html", events=all_events)
+
+@app.route("/book-event")
+def b():
+    return "Your Event Id"  + request.form['event_name']

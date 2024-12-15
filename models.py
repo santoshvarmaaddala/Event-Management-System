@@ -12,3 +12,11 @@ class User:
         self.username = username
         self.password = password
         self.role = role
+
+    def __str__(self):
+        return self.username
+
+class BookEvent:
+    def __init__(self):
+        self.user = None
+        self.event = None

@@ -5,9 +5,9 @@
         <p>{{event.capacity}}</p>
         <p>{{event.location}}</p>
         <p>{{event.price_per_location}}</p>
-        <p>
-            {% if event.status and user.role == 'USER' %}
-                <a href="/book/{{event_name}}">Book Now</a>
+        <p style="{% if event.status %} color:green {% else %} color:red {% endif %}">
+            {% if event.status %}
+                available
             {% else %}
                 booked
             {% endif %}
