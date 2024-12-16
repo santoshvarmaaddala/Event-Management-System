@@ -99,6 +99,10 @@
             text-align: center;
         }
 
+        label{
+         color: #00246B;
+        }
+
         button a {
             text-decoration: none;
             color: inherit; /* Ensures the link inherits the button's text color */
@@ -137,12 +141,12 @@
             {% endif %}
             <form method="POST" action="/login">
                 <div class="uname">
-                    <label for="username">Username:</label>
+                    <label for="username"><b>Username:</b></label>
                     <input type="text" id="username" name="username" placeholder="Enter username" required>
                 </div>
                 
                 <div class="pwd">
-                    <label for="password">Password:</label>
+                    <label for="password"><b>Password:</b></label>
                     <input type="password" id="password" name="password" placeholder="Enter password" required>
                 </div>
                 
