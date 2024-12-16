@@ -45,6 +45,8 @@ def logout():
     if "user" in session:
         session.clear()
     return redirect(url_for("login"))
+
+
 @app.route('/home')
 def landinghome():
     if not is_logged_in():
@@ -64,8 +66,6 @@ def register():
 
 @app.route('/register', methods=['POST'])
 def adduser():
-    if not is_logged_in():
-        return redirect(url_for('login'))
     username = request.form["username"]
     password = request.form["password"]
     role = request.form['role']
@@ -169,7 +169,7 @@ app.run(debug=True)
 def deleteevent(event_id):
     event = Event.query.get(event_id)
     if not event:
-        return redirect(url_for("login"))
+        return redirect(url_for("landinghome"))
     db.session.delete(event)
     db.session.commit()
-    return redirect(url_for("login"))
+    return redirect(url_for("landinghome"))
