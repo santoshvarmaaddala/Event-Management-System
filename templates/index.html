@@ -4,73 +4,110 @@
     <meta charset="UTF-8">
     <title>Event Management System</title>
     <style>
-        *{
+        * {
             margin: 0;
-        }  
-        nav div h1{
-            color: #CADCFC;
-            margin-left: 10px;
-            animation: blink 2s forwards;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
         }
 
-        @keyframes blink {
-            from{
-                opacity: 0;
-            }
-            to{
-                opacity: 1;
-            }
-        }
-        .bold{
-            font-weight: 900; 
-        }
-        nav{
-            width: 100%;
-            height: 12vh;
-            background-color: #00246B;
+        body {
+            height: 100vh;
             display: flex;
-            direction: row;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            
+            background-color: #CADCFC;
         }
 
-        nav a{
-            padding: 15px;
-            background-color: rgb(68, 68, 186);
-            text-decoration: none;
-            border-radius: 20px;
+        .container {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: stretch;
+            width: 80%;
+            height: 88vh;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden; /* Ensures no content spills outside the container */
+        }
+
+        .description {
+            width: 50%;
+            padding: 30px;
+            background-color: #00246B; /* Bright contrasting color */
             color: white;
-            margin-right: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: left;
         }
 
-        nav a:hover{
-            background-color: #CADCFC;
-            color: #00246B;    
-        }
-        
-        .fontsize{
-            font-size: larger;
+        .description h1 {
+            font-size: 2.8rem;
+            font-weight: bold;
+            margin-bottom: 20px;
         }
 
-        main{
-            background-color: #CADCFC;
-            width: 100%;
-            height: calc(100vh - 12vh);
+        .description p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        .links {
+            width: 50%;
+            padding: 20px;
+            background-color: #F0F8FF; /* Light complementary color */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .links h2 {
+            font-size: 2rem;
+            color: #00246B;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .links a {
+            display: inline-block;
+            width: 220px;
+            text-align: center;
+            padding: 12px 20px;
+            margin: 10px 0;
+            text-decoration: none;
+            font-size: 1.2rem;
+            color: white;
+            background-color: #00246B;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.2s;
+        }
+
+        .links a:hover {
+            background-color: #0056b3;
+            transform: scale(1.05); /* Slight animation on hover */
         }
     </style>
 </head>
 <body>
-    <nav>
-        <div class="logo bold fontsize">
-            <h1>Event Management System</h1>
+    <div class="container">
+        <!-- Bright Section -->
+        <div class="description">
+            <h1>Plan Your Events With Ease</h1>
+            <p>
+                Discover the ultimate event management solution designed to simplify your planning process. 
+                From organizing guest lists to managing schedules, we’ve got you covered. 
+                Get started now and bring your ideas to life!
+            </p>
         </div>
-        <a href="/login" class="bold fontsize">login</a>
-    </nav>
-   <main>
-    <h1>Welcome Home</h1>
 
-    <a href="/register">register from here</a>
-   </main>
+        <!-- Light Section with Links -->
+        <div class="links">
+            <h2>Get Started</h2>
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+        </div>
+    </div>
 </body>
 </html>

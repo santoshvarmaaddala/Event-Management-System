@@ -5,27 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #CADCFC;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            height: 100vh;
+        * {
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        .login-container {
-            background: #fff;
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #CADCFC;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: stretch;
+            width: 80%;
+            max-width: 1200px;
+            height: 88vh;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .description {
+            width: 50%;
+            padding: 30px;
+            background-color: #00246B; /* Bright contrasting color */
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: left;
+        }
+
+        .description h1, .form-container h1 {
+            font-size: 2.8rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .description p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        .form-container {
+            width: 50%;
+            background-color: #F0F8FF; /* Light complementary color */
+            display: flex;
+            gap: 20px;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
         }
 
         h2 {
-            text-align: center;
+            font-size: 2rem;
+            color: #00246B;
             margin-bottom: 20px;
+            text-align: center;
         }
 
         .error {
@@ -35,16 +80,16 @@
         }
 
         input {
-            width: 100%;
+            width: 80%;
             padding: 8px;
             margin: 8px 0;
             box-sizing: border-box;
         }
 
         button, button a {
-            width: 100%;
+            width: 80%;
             padding: 8px;
-            background-color: #007BFF;
+            background-color: #00246B;
             color: white;
             border: none;
             border-radius: 5px;
@@ -53,53 +98,60 @@
             font-size: 16px;
             text-align: center;
         }
-        
+
         button a {
             text-decoration: none;
             color: inherit; /* Ensures the link inherits the button's text color */
-            
         }
-        
+
         button:hover, button:hover a {
             background-color: #0056b3;
         }
 
-        .greeting{
-            animation: blink 2s forwards;
-        }
         
-        @keyframes blink {
-            from{
-                opacity: 0;
-            }
-            to{
-                opacity: 1;
-            }
+
+        .btn, .uname, .pwd{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+           
         }
     </style>
 </head>
 <body>
-    <div class="greeting" style="font-size: large; color: #00246B">
-        <h1>Welcome to Event Booking System</h1>
-    </div>
-    <div class="login-container">
-        <h2 style="color: #00246B;">LOGIN</h2>
-        {% if message %}
-            <b>{{message}}</b>
-        {% endif %}
-        {% if error %}
-            <div class="error">{{ error }}</div>
-        {% endif %}
-        <form method="POST" action="/login">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" placeholder="Enter username" required>
-            
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" placeholder="Enter password" required>
-            
-            <button type="submit">Login</button>
-            <button><a href="/register">Register</a></button>
-        </form>
+    <div class="container">
+        <!-- Description Section (Left Side) -->
+        <div class="description">
+            <h1>Welcome to Event Booking System</h1>
+            <p>Sign in to manage your events and bookings with ease. Enjoy a seamless experience while organizing and managing your events.</p>
+        </div>
+
+        <!-- Form Section (Right Side) -->
+        <div class="form-container">
+            <h1 style="color: #00246B;">Login</h1>
+            {% if message %}
+                <b>{{ message }}</b>
+            {% endif %}
+            {% if error %}
+                <div class="error">{{ error }}</div>
+            {% endif %}
+            <form method="POST" action="/login">
+                <div class="uname">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" placeholder="Enter username" required>
+                </div>
+                
+                <div class="pwd">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" placeholder="Enter password" required>
+                </div>
+                
+                <div class="btn">
+                    <button type="submit">Login</button>
+                    <button><a href="/register">Register</a></button>
+                </div>
+            </form>
+        </div>
     </div>
 </body>
 </html>
