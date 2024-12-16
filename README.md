@@ -68,4 +68,3 @@ This Flask project is an Event Booking System that allows users to view availabl
     GitHub: https://github.com/rayimanoj8
   
 
-
