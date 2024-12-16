@@ -2,29 +2,118 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Create a Event</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create an Event</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #F0F8FF;
+        }
+
+        .event-container {
+            width: 70%;
+            height: 95vh;
+            max-width: 700px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            background-color: #FFFFFF;
+            border-radius: 12px;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .event-container h2 {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #00246B;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .event-container label {
+            font-size: 1rem;
+            color: #00246B;
+            margin-bottom: 8px;
+            text-align: left;
+            width: 80%;
+        }
+
+        .event-container input,
+        .event-container select {
+            width: 80%;
+            padding: 12px;
+            margin: 8px 0;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        .event-container input:focus,
+        .event-container select:focus {
+            border-color: #007BFF;
+        }
+
+        .event-button {
+            width: 80%;
+            padding: 12px;
+            background-color: #00246B;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .event-button:hover {
+            background-color: #0056b3;
+        }
+        form{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+           
+        }
+    </style>
 </head>
 <body>
-    <form action="/addevent" method="POST">
-        <label for="event_name">Event Name:</label><br>
-        <input type="text" id="event_name" name="eventname" required><br><br>
+    <div class="event-container">
+        <h2>Create an Event</h2>
+        <form action="/addevent" method="POST">
+            <label for="event_name"><b>Event Name:</b></label>
+            <input type="text" id="event_name" name="eventname" required placeholder="Enter event name">
 
-        <label for="capacity">Capacity:</label><br>
-        <input type="number" id="capacity" name="capacity" required><br><br>
+            <label for="capacity"><b>Capacity:</b></label>
+            <input type="number" id="capacity" name="capacity" required placeholder="Enter capacity">
 
-        <label for="location">Location:</label><br>
-        <input type="text" id="location" name="location" required><br><br>
+            <label for="location"><b>Location:</b></label>
+            <input type="text" id="location" name="location" required placeholder="Enter location">
 
-        <label for="price_per_hour">Price per Hour:</label><br>
-        <input type="number" id="price_per_hour" name="pph" step="0.01" required><br><br>
+            <label for="price_per_hour"><b>Price per Hour:</b></label>
+            <input type="number" id="price_per_hour" name="pph" step="0.01" required placeholder="Enter price per hour">
 
-        <label for="status">Status:</label><br>
-        <select id="status" name="status">
-            <option value="True">Active</option>
-            <option value="False">Inactive</option>
-        </select><br><br>
+            <label for="status"><b>Status:</b></label>
+            <select id="status" name="status">
+                <option value="True">Active</option>
+                <option value="False">Inactive</option>
+            </select>
 
-        <button type="submit">Submit</button>
-    </form>
+            <button type="submit" class="event-button">Create Event</button>
+        </form>
+    </div>
 </body>
 </html>
