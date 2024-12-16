@@ -130,6 +130,22 @@ def b():
     events = Event.query.filter_by(status=True).all()
     return render_template("userhome.html", message="Booking successful.", events=events)
 
+# function to convert id to eventname
+def getName(id):
+    event = Event.query.get(id)
+    return event.event_name
+
+def getIterable(iterable):
+    res = []
+    for item in iterable:
+        res.append(
+            {
+                "user" : item.username,
+                "event" : getName(item.event_id),
+            }
+        )
+
+    return res
 
 @app.route("/getall")
 def getall():
@@ -137,8 +153,10 @@ def getall():
         return redirect(url_for('login'))
     if session["role"] == "ADMIN":
         bookings = BookEvent.query.all()
+        bookings = getIterable(bookings)
         return render_template("bookings.html", books=bookings)
     user_bookings = BookEvent.query.filter_by(username=session["user"]).all()
+    user_bookings = getIterable(user_bookings)
     return render_template("bookings.html", books=user_bookings)
 
 

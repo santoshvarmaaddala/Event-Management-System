@@ -31,3 +31,5 @@ class BookEvent(db.Model):
     username = db.Column(db.String(50), db.ForeignKey('user.username', ondelete='CASCADE'), nullable=False)
     event_id = db.Column(db.Integer, db.ForeignKey('event.id', ondelete='CASCADE'), nullable=False)
 
+    def __str__(self):
+        return self.username + " Holds " + str(self.event_id)
