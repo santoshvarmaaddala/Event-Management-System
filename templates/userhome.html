@@ -191,7 +191,7 @@
                 <h2>{{ event.event_name }}</h2>
                 <p><strong>Capacity:</strong> {{ event.capacity }}</p>
                 <p><strong>Location:</strong> {{ event.location }}</p>
-                <p><strong>Price per Location:</strong> {{ event.price_per_hour }}</p>
+                <p><strong>Price per Hour:</strong> {{ event.price_per_hour }}</p>
                 <p class="status {% if event.status %}green{% else %}red{% endif %}">
                     {% if event.status %}
                         <input type="hidden" name="event_name" value="{{ event.event_name }}">
