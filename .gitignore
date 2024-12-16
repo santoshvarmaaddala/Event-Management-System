@@ -4,3 +4,4 @@ __pycache__
 my-memory.txt
 event_flask_project
 instance/app.db
+.idea

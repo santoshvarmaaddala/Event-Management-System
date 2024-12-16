@@ -14,8 +14,10 @@
                 booked
             {% endif %}
         </p>
+        <a href="/delete/{{event.id}}">Delete this Event</a>
     </div>
 {% endfor %}
 <a href="/logout" onclick="alert('your session may deleted')">logout</a>
+<a href="/getall" >get all bookings</a>
 <a href="/addevent">Add a event</a>
 <a href="/createadmin">Create a admin</a>
