@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, session
+from flask import redirect, url_for
 from models import db, Event, User, BookEvent
+
 
 app = Flask(__name__)
 app.secret_key = "jhkgfjhkfgdjhkfgdjhfgdjhfgd"
@@ -37,6 +39,11 @@ def login():
             error = 'Invalid username/password'
     return render_template('login.html', error=error)
 
+@app.route("/logout")
+def logout():
+    if "user" in session:
+        session.clear()
+    return redirect(url_for("login"))
 
 @app.route('/register', methods=['GET'])
 def register():
