@@ -36,7 +36,7 @@
         }
 
         .header .links{
-            width: 40%;
+            width: 45%;
             display: flex;
             justify-content: space-between;
         }
@@ -141,6 +141,23 @@
             border-color: white;
         }
 
+        .card-blue button{
+            background-color: white;
+            color: white;
+        }
+
+        .card-white button a{
+            color: white;
+        }
+
+        .card-white button{
+            background-color: #00246B;
+        }
+
+        .card-blue button a{
+            color: #00246B;
+        }
+
         .card-blue p{
             color: white;
         }
@@ -160,6 +177,19 @@
                 left: 0;
             }
         }
+
+        .container .event-item button{
+            width: 100px;
+            padding: 6px;
+            border-radius: 5px;
+        }
+
+        .container .event-item button a{
+            text-decoration: none;
+        }
+
+        
+
     </style>
 </head>
 <body>
@@ -185,11 +215,14 @@
                 <p class="status {% if event.status %}green{% else %}red{% endif %}">
                     {% if event.status %}
                         <input type="hidden" name="event_name" value="{{ event.event_name }}">
-                        <input type="submit" value="Book Now">
+                        <input type="submit" value="Book Now" style="font-weight: 600;">
                     {% else %}
                         Booked
                     {% endif %}
                 </p>
+                {% if event.id %}
+                <button><a href="/delete/{{ event.id }}"><strong>Delete</strong></a></button>
+                {% endif %}
             </form>
         {% endfor %}
         

@@ -53,7 +53,7 @@ def landinghome():
         return redirect(url_for('login'))
     user = session['user']
     if session["role"] == "ADMIN":
-        events = Event.query.all()
+        events = Event.query.all()  
         return render_template("admin.html", user=user, events=events)
     events = Event.query.filter_by(status=True).all()
     return render_template("userhome.html", user=user, events=events)
@@ -61,6 +61,7 @@ def landinghome():
 
 @app.route('/register', methods=['GET'])
 def register():
+    ('Registered Successfully')
     return render_template("register.html", role="USER")
 
 
@@ -105,7 +106,11 @@ def book_an_event():
     username = session.get("user")  # Use .get() to handle missing session keys gracefully.
     if not username:
         return redirect(url_for('login'))  # Redirect to login if the user is not logged in.
-
+    
+    if session["role"] == "ADMIN":
+        events = Event.query.all()  
+        return render_template("admin.html")
+    
     event_name = request.form.get('event_name')  # Use .get() to avoid KeyError if event_name is missing.
     if not event_name:
         return render_template("userhome.html", message="Event name is required.", events=Event.query.filter_by(status=True).all())
