@@ -53,7 +53,7 @@ def landinghome():
         return redirect(url_for('login'))
     user = session['user']
     if session["role"] == "ADMIN":
-        events = Event.query.all()
+        events = Event.query.all()  
         return render_template("admin.html", user=user, events=events)
     events = Event.query.filter_by(status=True).all()
     return render_template("userhome.html", user=user, events=events)
@@ -61,6 +61,7 @@ def landinghome():
 
 @app.route('/register', methods=['GET'])
 def register():
+    ('Registered Successfully')
     return render_template("register.html", role="USER")
 
 
@@ -99,13 +100,17 @@ def add_events():
 
 
 @app.route("/book-event", methods=['POST'])
-def b():
+def book_an_event():
     if not is_logged_in():
         return redirect(url_for('login'))
     username = session.get("user")  # Use .get() to handle missing session keys gracefully.
     if not username:
         return redirect(url_for('login'))  # Redirect to login if the user is not logged in.
-
+    
+    if session["role"] == "ADMIN":
+        events = Event.query.all()  
+        return render_template("admin.html")
+    
     event_name = request.form.get('event_name')  # Use .get() to avoid KeyError if event_name is missing.
     if not event_name:
         return render_template("userhome.html", message="Event name is required.", events=Event.query.filter_by(status=True).all())
@@ -161,7 +166,7 @@ def getall():
 
 
 @app.route("/createadmin")
-def ca():
+def create_admin():
     if not is_logged_in():
         return redirect(url_for('login'))
     return render_template("register.html", role="ADMIN")
