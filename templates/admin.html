@@ -188,7 +188,39 @@
             text-decoration: none;
         }
 
+        .notify-div{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .notify{
+            color :#00246B;
+            animation: blink-inf 1s infinite; 
+        }
+
+        .notify-div button{
+            width: 150px;
+            height: 50px;
+            background-color: #00246B;
+            border-radius: 5px;
+        }
+
+        .notify-div button a{
+            text-decoration: none;
+            color: white;
+        }
         
+        
+        @keyframes blink-inf {
+            from{
+                opacity: 0;
+            }
+            to{
+                opacity: 1;
+            }
+        }
 
     </style>
 </head>
@@ -206,26 +238,31 @@
     </div>
 
     <div class="container">
-        {% for event in events %}
-            <form action="/delete/{{ event.id }}" class="event-item {% if loop.index is even %}card-blue{% else %}card-white{% endif %}">
-                <h2>{{ event.event_name }}</h2>
-                <p><strong>Capacity:</strong> {{ event.capacity }}</p>
-                <p><strong>Location:</strong> {{ event.location }}</p>
-                <p><strong>Price per Hour:</strong> {{ event.price_per_hour }}</p>
-                <p class="status {% if event.status %}green{% else %}red{% endif %}">
-                    {% if event.status %}
-                        <input type="hidden" name="event_name" value="{{ event.event_name }}">
-                        <input type="submit" value="Book Now" style="font-weight: 600;">
-                    {% else %}
-                        Booked
+        {% if not events%}
+            <div class="notify-div">
+                <h1 class="notify">No Events Yet!</h1>
+                <button><a href="/addevent"><strong>Add First Event</strong></a></button>
+        {% else %}
+            {% for event in events %}
+                <form action="/delete/{{ event.id }}" class="event-item {% if loop.index is even %}card-blue{% else %}card-white{% endif %}">
+                    <h2>{{ event.event_name }}</h2>
+                    <p><strong>Capacity:</strong> {{ event.capacity }}</p>
+                    <p><strong>Location:</strong> {{ event.location }}</p>
+                    <p><strong>Price per Hour:</strong> {{ event.price_per_hour }}</p>
+                    <p class="status {% if event.status %}green{% else %}red{% endif %}">
+                        {% if event.status %}
+                            <input type="hidden" name="event_name" value="{{ event.event_name }}">
+                            <input type="submit" value="Book Now" style="font-weight: 600;">
+                        {% else %}
+                            Booked
+                        {% endif %}
+                    </p>
+                    {% if event.id %}
+                        <input type="submit" value="Delete" style="font-weight: 600;">
                     {% endif %}
-                </p>
-                {% if event.id %}
-                    <input type="submit" value="Delete Event" style="font-weight: 600;">
-                {% endif %}
-            </form>
-        {% endfor %}
-        
+                </form>
+            {% endfor %}
+        {% endif %}
     </div>
 </body>
 </html>
