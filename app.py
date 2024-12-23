@@ -99,7 +99,7 @@ def add_events():
 
 
 @app.route("/book-event", methods=['POST'])
-def b():
+def book_an_event():
     if not is_logged_in():
         return redirect(url_for('login'))
     username = session.get("user")  # Use .get() to handle missing session keys gracefully.
@@ -161,7 +161,7 @@ def getall():
 
 
 @app.route("/createadmin")
-def ca():
+def create_admin():
     if not is_logged_in():
         return redirect(url_for('login'))
     return render_template("register.html", role="ADMIN")
