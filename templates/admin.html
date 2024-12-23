@@ -207,7 +207,7 @@
 
     <div class="container">
         {% for event in events %}
-            <form action="/book-event" method="post" class="event-item {% if loop.index is even %}card-blue{% else %}card-white{% endif %}">
+            <form action="/delete/{{ event.id }}" class="event-item {% if loop.index is even %}card-blue{% else %}card-white{% endif %}">
                 <h2>{{ event.event_name }}</h2>
                 <p><strong>Capacity:</strong> {{ event.capacity }}</p>
                 <p><strong>Location:</strong> {{ event.location }}</p>
@@ -221,7 +221,7 @@
                     {% endif %}
                 </p>
                 {% if event.id %}
-                <button><a href="/delete/{{ event.id }}"><strong>Delete</strong></a></button>
+                    <input type="submit" value="Delete Event" style="font-weight: 600;">
                 {% endif %}
             </form>
         {% endfor %}

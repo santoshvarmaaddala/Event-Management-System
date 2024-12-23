@@ -186,11 +186,11 @@ with app.app_context():
 print("Database setup complete!")
 app.run(debug=True)
 
-@app.route('/delete/<int:event_id>')
 # how to access event id from abouve url
-@app.route('/delete/<int:event_id>')
+@app.route('/delete/<int:event_id>',methods=['GET'])
 def deleteevent(event_id):
     event = Event.query.get(event_id)
+    print(event)
     if not event:
         return redirect(url_for("landinghome"))
     db.session.delete(event)
