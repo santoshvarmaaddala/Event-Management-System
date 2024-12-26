@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Event</title>
     <style>
+        /* Existing styles */
         body {
             font-family: Arial, sans-serif;
             background-color: #F0F8FF;
@@ -39,7 +40,7 @@
         .links {
             display: flex;
             align-items: center;
-            margin: 20px;
+            margin: 30px;
         }
 
         .links a {
@@ -76,12 +77,9 @@
         }
 
         .notification-item {
-            position: relative;
             padding: 10px;
             border-bottom: 1px solid #ddd;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            cursor: pointer;
         }
 
         .notification-item:last-child {
@@ -97,6 +95,17 @@
         .notification-item time {
             font-size: 12px;
             color: #999;
+        }
+
+        .message-body {
+            display: none;
+            padding-top: 5px;
+            font-size: 13px;
+            color: #555;
+        }
+
+        .notification-item.open .message-body {
+            display: block;
         }
 
         .delete-btn {
@@ -133,6 +142,23 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             transition: background-color 0.3s ease-in-out;
         }
+
+        .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: transparent;
+            border: none;
+            color: #999;
+            font-size: 14px;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        
+        .delete-btn:hover {
+            color: red;
+        }
+        
     </style>
 </head>
 <body>
@@ -146,15 +172,15 @@
             <div class="notification">
                 <span class="bell-icon" onclick="toggleDropdown()">🔔</span>
                 <div class="notification-dropdown" id="notificationDropdown">
-                    <!-- Notifications will be dynamically added here -->
-                     {% for notification in notifications %}
-                    <form action="/clear/{{notification.id}}" method="POST">
-                    <div class="notification-item">
-                        <p>{{ notification.title }}</p>
-                        <time>{{ notification.timestamp }}</time>
-                        <input type="submit" class="delete-btn" value="❌">
-                    </div>
-                    </form>
+                    {% for notification in notifications %}
+                        <div class="notification-item" onclick="toggleMessage(this)">
+                            <p>{{ notification.title }}</p>
+                            <time>{{ notification.timestamp }}</time>
+                            <div class="message-body">{{ notification.message }}</div>
+                            <form action="/clear/{{ notification.id }}" method="POST" class="delete-form">
+                                <input type="submit" class="delete-btn" value="❌">
+                            </form>
+                        </div>
                     {% endfor %}
                 </div>
             </div>
@@ -189,16 +215,12 @@
             const dropdown = document.getElementById('notificationDropdown');
             dropdown.classList.toggle('active');
         }
-
-        function deleteNotification(button) {
-            // Remove the notification item from the DOM
-            const notificationItem = button.parentElement;
-            notificationItem.remove();
-            toggleDropdown();
-            // Optionally send a request to the server to delete the notification
-            console.log('Notification deleted.');
+    
+        function toggleMessage(notificationItem) {
+            const messageBody = notificationItem.querySelector('.message-body');
+            messageBody.style.display = messageBody.style.display === 'block' ? 'none' : 'block';
         }
-
+    
         // Close dropdown when clicked outside
         document.addEventListener('click', function(event) {
             const dropdown = document.getElementById('notificationDropdown');
