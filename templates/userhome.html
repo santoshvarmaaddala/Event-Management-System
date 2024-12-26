@@ -13,10 +13,9 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
-            padding-top: 60px; /* To prevent overlap with fixed header */
+            padding-top: 60px;
         }
 
-        /* Fixed welcome message and logout at the top */
         .header {
             position: fixed;
             top: 0;
@@ -25,42 +24,101 @@
             height: 10vh;
             background-color: #00246B;
             color: white;
-            padding: 10px 0;
-            text-align: center;
-            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
             z-index: 100;
+        }
+
+        .logo span {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .links {
             display: flex;
-            flex-direction: row;
             align-items: center;
-            justify-content: space-between;
+            margin: 20px;
         }
 
-        .header .links{
-            margin-right: 20px;
-            width: 15%;
-            display: flex;
-            direction: row;
-            align-items: center;
-            justify-content: space-between;
-            
-
-        }
-
-        .logo{
-            font-weight: 700;
-        }
-        
-        .links a{
+        .links a {
+            margin: 0 20px;
             font-weight: 500;
             color: white;
             text-decoration: none;
         }
 
-       
+        .notification {
+            position: relative;
+        }
+
+        .notification .bell-icon {
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .notification-dropdown {
+            display: none;
+            position: absolute;
+            top: 35px;
+            right: 0;
+            width: 300px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            overflow: hidden;
+            z-index: 200;
+        }
+
+        .notification-dropdown.active {
+            display: block;
+        }
+
+        .notification-item {
+            position: relative;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+
+        .notification-item p {
+            margin: 0;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .notification-item time {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: transparent;
+            border: none;
+            color: #999;
+            font-size: 14px;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .delete-btn:hover {
+            color: red;
+        }
+
         .container {
             flex: 1;
             padding: 20px;
-            margin-top: 60px; /* To create space under the header */
+            margin-top: 60px;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
@@ -75,135 +133,78 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             transition: background-color 0.3s ease-in-out;
         }
-
-        .event-item p {
-            color: #333;
-            margin-bottom: 10px;
-        }
-
-        .event-item h2 {
-            margin-bottom: 15px;
-        }
-
-        .status {
-            font-weight: bold;
-            margin-top: 10px;
-        }
-
-        .status.green {
-            color: green;
-        }
-
-        .status.red {
-            color: red;
-        }
-
-        
-        .logout-link {
-            display: block;
-            margin-top: 20px;
-            text-align: center;
-            text-decoration: none;
-            color: #007BFF;
-        }
-
-        .logout-link:hover {
-            color: #0056b3;
-        }
-
-        /* Alternate card background colors */
-        .card-blue {
-            background-color: #00246B;
-            color: white;
-        }
-
-        .card-white {
-            background-color: white;
-            color:#00246B;
-        }
-
-        .card-blue input[type="submit"] {
-            background-color: white;
-            color: #00246B;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .card-white input[type="submit"] {
-            background-color: #00246B;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .card-white input[type="submit"]:hover{
-            background-color: white;
-            color: #00246B;
-            border-color: blue;
-        }
-
-        .card-blue input[type="submit"]:hover{
-            background-color: #00246B;
-            color: white;
-            border-color: white;
-        }
-
-
-        .card-blue p{
-            color: white;
-        }
-
-        .header span{
-            margin-left: 10px;
-            animation: from-left 1s forwards;
-        }
-
-        @keyframes from-left {
-            from{
-                opacity: 0;
-                left: -100px;
-            }
-            to{
-                opacity: 1;
-                left: 0;
-            }
-        }
     </style>
 </head>
 <body>
     <div class="header">
         <div class="logo">
-            <span>WELCOME, {{ session['user'].upper() }} </span>
+            <span>WELCOME, {{ session['user'].upper() }}</span>
         </div>
         <div class="links">
-            <a href="/getall" >Your Events</a>
+            <a href="/getall">Your Events</a>
             <a href="/logout" onclick="alert('Your session may be deleted')">Logout</a>
+            <div class="notification">
+                <span class="bell-icon" onclick="toggleDropdown()">🔔</span>
+                <div class="notification-dropdown" id="notificationDropdown">
+                    <!-- Notifications will be dynamically added here -->
+                     {% for notification in notifications %}
+                    <div class="notification-item">
+                        <p>{{ notification.title }}</p>
+                        <time>{{ notification.timestamp }}</time>
+                        <button class="delete-btn" onclick="deleteNotification(this)">✖</button>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
     </div>
 
     <div class="container">
-        {% for event in events %}
-            <form action="/book-event" method="post" class="event-item {% if loop.index is even %}card-blue{% else %}card-white{% endif %}">
-                <h2>{{ event.event_name }}</h2>
-                <p><strong>Capacity:</strong> {{ event.capacity }}</p>
-                <p><strong>Location:</strong> {{ event.location }}</p>
-                <p><strong>Price per Hour:</strong> {{ event.price_per_hour }}</p>
-                <p class="status {% if event.status %}green{% else %}red{% endif %}">
-                    {% if event.status %}
-                        <input type="hidden" name="event_name" value="{{ event.event_name }}">
-                        <input type="submit" value="Book Now">
-                    {% else %}
-                        Booked
-                    {% endif %}
-                </p>
-            </form>
-        {% endfor %}
-        
+        {% if not events %}
+            <p>No events now!</p>
+        {% else %}
+            {% for event in events %}
+                <form action="/book-event" method="post" class="event-item {% if loop.index is even %}card-blue{% else %}card-white{% endif %}">
+                    <h2>{{ event.event_name }}</h2>
+                    <p><strong>Capacity:</strong> {{ event.capacity }}</p>
+                    <p><strong>Location:</strong> {{ event.location }}</p>
+                    <p><strong>Price per Hour:</strong> {{ event.price_per_hour }}</p>
+                    <p class="status {% if event.status %}green{% else %}red{% endif %}">
+                        {% if event.status %}
+                            <input type="hidden" name="event_name" value="{{ event.event_name }}">
+                            <input type="submit" value="Book Now">
+                        {% else %}
+                            Booked
+                        {% endif %}
+                    </p>
+                </form>
+            {% endfor %}
+        {% endif %}  
     </div>
-    
+
+    <script>
+        function toggleDropdown() {
+            const dropdown = document.getElementById('notificationDropdown');
+            dropdown.classList.toggle('active');
+        }
+
+        function deleteNotification(button) {
+            // Remove the notification item from the DOM
+            const notificationItem = button.parentElement;
+            notificationItem.remove();
+            toggleDropdown();
+            // Optionally send a request to the server to delete the notification
+            console.log('Notification deleted.');
+        }
+
+        // Close dropdown when clicked outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('notificationDropdown');
+            const bellIcon = document.querySelector('.bell-icon');
+            if (!dropdown.contains(event.target) && !bellIcon.contains(event.target)) {
+                dropdown.classList.remove('active');
+            }
+        });
+    </script>
 </body>
 </html>

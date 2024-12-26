@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, session
 from flask import redirect, url_for
 from sqlalchemy import event
 
-from models import db, Event, User, BookEvent
+from models import db, Event, User, BookEvent, Notification
 
 
 app = Flask(__name__)
@@ -56,7 +56,8 @@ def landinghome():
         events = Event.query.all()  
         return render_template("admin.html", user=user, events=events)
     events = Event.query.filter_by(status=True).all()
-    return render_template("userhome.html", user=user, events=events)
+    notifications = Notification.query.filter_by(recipient = user).all()
+    return render_template("userhome.html", user=user, events=events, notifications = notifications)
 
 
 @app.route('/register', methods=['GET'])
@@ -196,3 +197,29 @@ def deleteevent(event_id):
     db.session.delete(event)
     db.session.commit()
     return redirect(url_for("landinghome"))
+
+@app.route('/create-notification', methods=['GET', 'POST'])
+def create_notification():
+    if not is_logged_in() or session.get('role') != 'ADMIN':
+        return redirect(url_for('login'))
+    
+    if request.method == 'POST':
+        title = request.form.get('title')
+        message = request.form.get('message')
+        recipient = request.form.get('recipient')
+
+        notification = Notification(title = title, message = message, recipient = recipient)
+        db.session.add(notification)
+        db.session.commit()
+        return redirect(url_for('notificationsPanel'))
+    users = User.query.filter(User.role != 'ADMIN').all()
+    return render_template('create_notification.html', users = users)
+
+
+@app.route('/notifications', methods=['GET'])
+def notificationsPanel():
+    if not is_logged_in() or session.get("role") != "ADMIN":
+        return redirect(url_for('login'))
+    
+    notifications = Notification.query.order_by(Notification.timestamp.desc()).all()
+    return render_template('notifications.html', notifications=notifications)

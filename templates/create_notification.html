@@ -1,0 +1,18 @@
+<h2>Create Notification</h2>
+<form method="POST" action="/create-notification">
+    <label for="title">Title:</label>
+    <input type="text" name="title" id="title" required><br>
+
+    <label for="message">Message:</label>
+    <textarea name="message" id="message" required></textarea><br>
+
+    <label for="recipient">Recipient:</label>
+    <select name="recipient" id="recipient">
+        <option value="">All Users</option>
+        {% for user in users %}
+            <option value="{{ user.username }}">{{ user.username }}</option>
+        {% endfor %}
+    </select><br>
+
+    <button type="submit">Send Notification</button>
+</form>

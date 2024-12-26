@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 db = SQLAlchemy()
 
@@ -33,3 +34,10 @@ class BookEvent(db.Model):
 
     def __str__(self):
         return self.username + " Holds " + str(self.event_id)
+    
+class Notification(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    message = db.Column(db.Text, nullable=False)
+    recipient = db.Column(db.String(50)) 
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)

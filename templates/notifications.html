@@ -1,0 +1,12 @@
+<h2>All Notifications</h2>
+<a href="/create-notification">Create Notification</a>
+<ul>
+    {% for notification in notifications %}
+        <li>
+            <strong>{{ notification.title }}</strong><br>
+            {{ notification.message }}<br>
+            <small>Sent to: {{ notification.recipient if notification.recipient else 'All Users' }}</small><br>
+            <small>Timestamp: {{ notification.timestamp }}</small>
+        </li>
+    {% endfor %}
+</ul>
