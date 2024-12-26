@@ -223,3 +223,14 @@ def notificationsPanel():
     
     notifications = Notification.query.order_by(Notification.timestamp.desc()).all()
     return render_template('notifications.html', notifications=notifications)
+
+@app.route("/clear/<int:n_id>",methods=['POST'])
+def clear(n_id):
+    if not is_logged_in():
+        return redirect(url_for('login'))
+    notification = Notification.query.get(n_id)
+    if not notification:
+        return redirect(url_for('landinghome'))
+    db.session.delete(notification)
+    db.session.commit()
+    return redirect(url_for('landinghome'))

@@ -148,11 +148,13 @@
                 <div class="notification-dropdown" id="notificationDropdown">
                     <!-- Notifications will be dynamically added here -->
                      {% for notification in notifications %}
+                    <form action="/clear/{{notification.id}}" method="POST">
                     <div class="notification-item">
                         <p>{{ notification.title }}</p>
                         <time>{{ notification.timestamp }}</time>
-                        <button class="delete-btn" onclick="deleteNotification(this)">✖</button>
+                        <input type="submit" class="delete-btn" value="❌">
                     </div>
+                    </form>
                     {% endfor %}
                 </div>
             </div>
