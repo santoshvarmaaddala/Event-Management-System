@@ -19,13 +19,13 @@ with app.app_context():
 
 # mail-server setup
 
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Use your email provider's SMTP server
-app.config['MAIL_PORT'] = 587  # Use 465 for SSL or 587 for TLS
-app.config['MAIL_USE_TLS'] = True  # Set to False if you don't want to use TLS
-app.config['MAIL_USE_SSL'] = False  # Set to True if you want to use SSL
-app.config['MAIL_USERNAME'] = 'sairamkiran2002@gmail.com'  # Your email address
-app.config['MAIL_PASSWORD'] = 'kydz zlwd ecmn pfog'  # Your email password (use app-specific password for Gmail)
-app.config['MAIL_DEFAULT_SENDER'] = 'sairamkiran2002@gmail.com'
+# app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Use your email provider's SMTP server
+# app.config['MAIL_PORT'] = 587  # Use 465 for SSL or 587 for TLS
+# app.config['MAIL_USE_TLS'] = True  # Set to False if you don't want to use TLS
+# app.config['MAIL_USE_SSL'] = False  # Set to True if you want to use SSL
+# app.config['MAIL_USERNAME'] = 'sairamkiran2002@gmail.com'  # Your email address
+# app.config['MAIL_PASSWORD'] = 'kydz zlwd ecmn pfog'  # Your email password (use app-specific password for Gmail)
+# app.config['MAIL_DEFAULT_SENDER'] = 'sairamkiran2002@gmail.com'
 
 mail_server = Mail(app)
 
