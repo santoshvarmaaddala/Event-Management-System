@@ -17,6 +17,17 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
+# mail-server setup
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Use your email provider's SMTP server
+app.config['MAIL_PORT'] = 587  # Use 465 for SSL or 587 for TLS
+app.config['MAIL_USE_TLS'] = True  # Set to False if you don't want to use TLS
+app.config['MAIL_USE_SSL'] = False  # Set to True if you want to use SSL
+app.config['MAIL_USERNAME'] = 'sairamkiran2002@gmail.com'  # Your email address
+app.config['MAIL_PASSWORD'] = 'kydz zlwd ecmn pfog'  # Your email password (use app-specific password for Gmail)
+app.config['MAIL_DEFAULT_SENDER'] = 'sairamkiran2002@gmail.com'
+
+mail_server = Mail(app)
 
 def valid_login(username, password):
     return User.query.filter_by(username=username, password=password).first()
@@ -137,6 +148,14 @@ def book_an_event():
     # Commit all changes
     db.session.commit()
 
+    msg = Message(
+        subject = "Event Booking Confirmation",
+        recipients = [mail],
+        body = f"Hello {username},\n\nYour booking for the event '{event_name}' has been confirmed!\n\nThank you for using our service."
+    )
+
+    mail_server.send(msg)
+    
     # Fetch available events to display on the page
     events = Event.query.filter_by(status=True).all()
     return render_template("userhome.html", message="Booking successful.", events=events)
@@ -247,3 +266,23 @@ def clear(n_id):
     db.session.commit()
     return redirect(url_for('landinghome'))
 
+@app.route("/mail-form/<string:mail>", methods=["GET"])
+def redirect_to_mailform(mail):
+    # Render the mail form and pass the recipient email
+    return render_template('mail.html', recipient=mail)
+
+@app.route("/send-mail/<string:mail>", methods=["POST"])
+def send_mail(mail):
+    # Handling the form submission
+    subject = request.form['subject']
+    message = request.form['message']
+    
+    msg = Message(
+        subject=subject,
+        recipients=[mail],
+        body=message
+    )
+
+    mail_server.send(msg)
+    return redirect(url_for('getall'))
+   
