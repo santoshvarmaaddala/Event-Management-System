@@ -98,7 +98,6 @@
 
             <label for="recipient">Recipient</label>
             <select name="recipient" id="recipient">
-                <option value="">All Users</option>
                 {% for user in users %}
                     <option value="{{ user.username }}">{{ user.username }}</option>
                 {% endfor %}

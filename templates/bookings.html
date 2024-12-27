@@ -66,10 +66,16 @@
     <div class="bookings-container">
         <h1>Bookings</h1>
         {% for i in books %}
-            <div class="booking-item">
-                <p><strong>Username:</strong> {{ i.user }}</p>
-                <p><strong>Event:</strong> {{ i.event }}</p>
-            </div>
+                <div class="booking-item">
+                    <p><strong>Username:</strong> {{ i.user }}</p>
+                    <p><strong>Event:</strong> {{ i.event }}</p>
+                    {% if i.role == 'ADMIN' %}
+                        <p><strong>Email:</strong> {{ i.mail }}</p>
+                        <form action="/send-mail" method="POST">
+                            <input type="submit" value="📧">
+                        </form>
+                    {% endif %}
+                </div>
         {% endfor %}
         <a href="/home" class="back-link">Go Home</a>
     </div>

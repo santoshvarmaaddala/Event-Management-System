@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, session
 from flask import redirect, url_for
 from sqlalchemy import event
+from flask_mail import Mail, Message
 
 from models import db, Event, User, BookEvent, Notification
 
@@ -35,6 +36,7 @@ def login():
         if user:
             session['user'] = user.username
             session['role'] = user.role
+            session["mail"] = user.mail
             return redirect(url_for('landinghome'))
         else:
             error = 'Invalid username/password'
@@ -62,7 +64,6 @@ def landinghome():
 
 @app.route('/register', methods=['GET'])
 def register():
-    ('Registered Successfully')
     return render_template("register.html", role="USER")
 
 
@@ -70,11 +71,12 @@ def register():
 def adduser():
     username = request.form["username"]
     password = request.form["password"]
+    mail = request.form["mail"]
     role = request.form['role']
     existing_user = User.query.filter_by(username=username).first()
     if existing_user:
         return "Username already exists, try changing the username"
-    new_user = User(username=username, password=password, role=role)
+    new_user = User(username=username, password=password, role=role, mail=mail)
     db.session.add(new_user)
     db.session.commit()
     return render_template("login.html", message="Please Login New User")
@@ -104,7 +106,10 @@ def add_events():
 def book_an_event():
     if not is_logged_in():
         return redirect(url_for('login'))
-    username = session.get("user")  # Use .get() to handle missing session keys gracefully.
+    
+    username = session.get("user")
+    mail = session.get("mail")  # Use .get() to handle missing session keys gracefully.
+    
     if not username:
         return redirect(url_for('login'))  # Redirect to login if the user is not logged in.
     
@@ -126,7 +131,7 @@ def book_an_event():
     db.session.add(event)
 
     # Add a new booking for the user
-    new_booking = BookEvent(username=username, event_id=event.id)
+    new_booking = BookEvent(username=username, event_id=event.id, mail=mail)
     db.session.add(new_booking)
 
     # Commit all changes
@@ -141,6 +146,10 @@ def getName(id):
     event = Event.query.get(id)
     return event.event_name
 
+def getRole():
+    return session["role"]
+
+
 def getIterable(iterable):
     res = []
     for item in iterable:
@@ -148,6 +157,8 @@ def getIterable(iterable):
             {
                 "user" : item.username,
                 "event" : getName(item.event_id),
+                "mail" : item.user.mail,
+                "role" : getRole()
             }
         )
 
@@ -179,12 +190,13 @@ with app.app_context():
     admin_user = User.query.filter_by(username="admin").first()
     if not admin_user:
         # Add default admin user
-        default_admin = User(username="admin", password="1234", role="ADMIN")
+        default_admin = User(username="admin", password="1234", role="ADMIN", mail="sairamkiran2002@gmail.com")
         db.session.add(default_admin)
         db.session.commit()
         print(db.session.query(User).all())
         print("Default admin user created: username='admin', password='1234'")
 print("Database setup complete!")
+
 app.run(debug=True)
 
 # how to access event id from abouve url
@@ -234,3 +246,4 @@ def clear(n_id):
     db.session.delete(notification)
     db.session.commit()
     return redirect(url_for('landinghome'))
+

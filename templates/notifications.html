@@ -38,11 +38,11 @@
             text-decoration: none;
             color: white;
             font-weight: bold;
-            padding: 10px 20px;
+            padding: 5px 10px;
             background-color: #FF4500;
             border-radius: 5px;
             transition: background-color 0.3s ease-in-out;
-            margin: 30px;
+            margin: 10px;
         }
 
         nav a:hover {
@@ -91,13 +91,25 @@
             margin: 10px 0;
             color: #374151;
         }
+        .sub{
+            height : 10vh;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-end;
+            margin :15px;
+        }
     </style>
 </head>
 <body>
     <!-- Navigation Bar -->
     <nav>
         <h2>Notifications</h2>
-        <a href="/create-notification" target="_self">Send Notification</a>
+        <div class="sub">
+            <a href="/create-notification">Send Notification</a>
+            <a href="/home">Go Back</a>
+        </div>
+        
     </nav>
 
     <!-- Notifications Container -->
